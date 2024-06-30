@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cupcake App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Cupcake List</h1>
+        <ul id="cupcake-list">
+            <!-- Cupcake items will be added here dynamically -->
+        </ul>
+
+        <h2>Add a New Cupcake</h2>
+        <form id="cupcake-form">
+            <label for="flavor">Flavor:</label>
+            <input type="text" id="flavor" name="flavor" required>
+            <br>
+            <label for="size">Size:</label>
+            <input type="text" id="size" name="size" required>
+            <br>
+            <label for="rating">Rating:</label>
+            <input type="number" step="0.1" id="rating" name="rating" required>
+            <br>
+            <label for="image">Image URL:</label>
+            <input type="url" id="image" name="image">
+            <br>
+            <button type="submit">Add Cupcake</button>
+        </form>
+
+        <div id="message"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        async function getCupcakes() {
+            const response = await axios.get('/api/cupcakes');
+            const cupcakes = response.data.cupcakes;
+
+            for (let cupcake of cupcakes) {
+                const $li = $(`
+                    <li data-id="${cupcake.id}">
+                        <img src="${cupcake.image}" alt="${cupcake.flavor}">
+                        <div class="cupcake-details">
+                            <strong>${cupcake.flavor}</strong>
+                            <span>Size: ${cupcake.size}</span>
+                            <span>Rating: ${cupcake.rating}</span>
+                            <button class="delete-btn">Delete</button>
+                        </div>
+                    </li>
+                `);
+                $('#cupcake-list').append($li);
+            }
+        }
+
+        $('#cupcake-form').on('submit', async function(event) {
+            event.preventDefault();
+
+            const flavor = $('#flavor').val();
+            const size = $('#size').val();
+            const rating = $('#rating').val();
+            const image = $('#image').val() || 'https://tinyurl.com/demo-cupcake';
+
+            const response = await axios.post('/api/cupcakes', {
+                flavor,
+                size,
+                rating,
+                image
+            });
+
+            const cupcake = response.data.cupcake;
+            const $li = $(`
+                <li data-id="${cupcake.id}">
+                    <img src="${cupcake.image}" alt="${cupcake.flavor}">
+                    <div class="cupcake-details">
+                        <strong>${cupcake.flavor}</strong>
+                        <span>Size: ${cupcake.size}</span>
+                        <span>Rating: ${cupcake.rating}</span>
+                        <button class="delete-btn">Delete</button>
+                    </div>
+                </li>
+            `);
+            $('#cupcake-list').append($li);
+
+            $('#cupcake-form').trigger('reset');
+        });
+
+        $('#cupcake-list').on('click', '.delete-btn', async function() {
+            const $li = $(this).closest('li');
+            const cupcakeId = $li.data('id');
+            const flavor = $li.find('strong').text();
+
+            const response = await axios.delete(`/api/cupcakes/${cupcakeId}`);
+            if (response.status === 200) {
+                $li.remove();
+                $('#message').text(`Deleted: ${flavor}`).addClass('show');
+                setTimeout(() => {
+                    $('#message').removeClass('show');
+                }, 3000);
+            }
+        });
+
+        $(document).ready(function() {
+            getCupcakes();
+        });
+    </script>
+</body>
+</html>

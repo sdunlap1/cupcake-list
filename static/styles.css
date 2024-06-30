@@ -1,0 +1,93 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  width: 60%;
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+  text-align: center;
+  color: #343a40;
+}
+
+#cupcake-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+#cupcake-list li {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  margin: 10px 0;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+#cupcake-list li img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 20px;
+}
+
+#cupcake-list li .cupcake-details {
+  display: flex;
+  flex-direction: column;
+}
+
+#cupcake-form {
+  margin-top: 20px;
+}
+
+#cupcake-form label {
+  display: block;
+  margin-top: 10px;
+}
+
+#cupcake-form input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+}
+
+#cupcake-form button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#cupcake-form button:hover {
+  background-color: #0056b3;
+}
+#message {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  border-radius: 5px;
+  display: none; /* Initially hide the message */
+}
+
+#message.show {
+  display: block;
+}
